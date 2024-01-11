@@ -43,6 +43,15 @@ export default [
         name: 'sub-page',
         component: './Admin',
       },
+      {
+        path: '/admin',
+        redirect: '/admin/D3',
+      },
+      {
+        path: '/admin/D3',
+        name: 'D3',
+        component: './Admin',
+      },
     ],
   },
   {
