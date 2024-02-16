@@ -29,6 +29,18 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/ThreeJS',
+    name: 'ThreeJS',
+    // component: './ThreeJS/index',
+    routes: [
+      {
+        path: '/ThreeJS',
+        name: 'Line',
+        component: './ThreeJS/Line/index',
+      },
+    ],
+  },
+  {
     path: '/admin',
     name: 'admin',
     icon: 'crown',
@@ -47,11 +59,16 @@ export default [
         path: '/admin',
         redirect: '/admin/D3',
       },
-      {
-        path: '/admin/D3',
-        name: 'D3',
-        component: './Admin',
-      },
+      // {
+      //   path: '/D3',
+      //   name: 'D3',
+      //   component: './D3/index',
+      // },
+      // {
+      //   path: '/ThreeJS',
+      //   name: 'ThreeJS',
+      //   component: './ThreeJS/index',
+      // },
     ],
   },
   {

@@ -50,4 +50,9 @@ export default {
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
   'menu.admin.D3': 'D3',
+  // ThreeJS
+  // [React Intl] Missing message: "menu.ThreeJS" for locale: "zh-CN", using default message as fallback.
+  'menu.admin.id': 'menu.ThreeJS',
+  'menu.admin.defaultMessage': 'Default message for ThreeJS menu',
+  'menu.admin.description': 'Message for ThreeJS menu in the menu',
 };
