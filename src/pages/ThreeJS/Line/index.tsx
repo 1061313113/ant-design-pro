@@ -31,6 +31,9 @@ class ThreeScene extends Component {
 
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
+    //     let points = [new THREE.Vector3(1, 2, 3), new THREE.Vector3(4, 5, 6)];
+    // let box = new THREE.Box3().setFromPoints(points);
+
     const line = new THREE.Line(geometry, material);
     scene.add(line);
 

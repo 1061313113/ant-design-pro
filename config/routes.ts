@@ -34,7 +34,12 @@ export default [
     // component: './ThreeJS/index',
     routes: [
       {
-        path: '/ThreeJS',
+        path: '/ThreeJS/Box',
+        name: 'Box',
+        component: './ThreeJS/Box/index',
+      },
+      {
+        path: '/ThreeJS/Line',
         name: 'Line',
         component: './ThreeJS/Line/index',
       },
