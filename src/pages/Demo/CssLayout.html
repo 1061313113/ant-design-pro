@@ -1,0 +1,27 @@
+<head>
+  <style>
+    body {
+      margin: 0px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body style="background: #555555">
+  <div style="height: 55px; background-color: #444444">上面布局</div>
+  <!-- 下 -->
+  <div>
+    <div id="left" style="position: absolute; top: 60px; background-color: #444444; width: 195px">
+      下面左侧布局
+    </div>
+    <div id="webgl" style="position: absolute; top: 60px; left: 200px; background-color: #444444">
+      下面右侧布局
+    </div>
+  </div>
+  <script>
+    const width = window.innerWidth - 200;
+    const height = window.innerHeight - 60;
+    document.getElementById('left').style.height = height + 'px';
+    document.getElementById('webgl').style.width = width + 'px';
+    document.getElementById('webgl').style.height = height + 'px';
+  </script>
+</body>

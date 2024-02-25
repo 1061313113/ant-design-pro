@@ -34,6 +34,11 @@ export default [
     // component: './ThreeJS/index',
     routes: [
       {
+        path: '/ThreeJS/CameraHouse',
+        name: 'CameraHouse',
+        component: './ThreeJS/ControlCamera/index',
+      },
+      {
         path: '/ThreeJS/Box',
         name: 'Box',
         component: './ThreeJS/Box/index',

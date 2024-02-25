@@ -7,8 +7,6 @@ class ThreeScene extends Component {
     this.sceneRef = React.createRef();
   }
 
-  
-
   componentDidMount() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
