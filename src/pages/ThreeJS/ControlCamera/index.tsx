@@ -23,7 +23,9 @@ class ThreeScene extends Component {
     this.sceneRef.current.appendChild(renderer.domElement);
 
     // 设置相机位置
-    camera.position.z = 10;
+    // camera.position.z = 10;
+    camera.position.set(0, -50, 50); // 设置相机位置
+    camera.lookAt(0, 0, 0); // 让相机朝向XOY平面的中心点
 
     // 创建控制器并实现相机控制
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -39,23 +41,32 @@ class ThreeScene extends Component {
     const floor1 = new THREE.Mesh(floorGeometry, floorMaterial);
     const floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
 
-    house.position.set(0, 0, 0);
+    house.position.set(0, 0, 5);
     floor1.position.set(0, -8, 0);
     floor2.position.set(0, -10, 0);
 
     // 创建地面的几何体
     const groundGeometry = new THREE.PlaneGeometry(100, 100, 10, 10); // 宽度和高度可以根据需要调整
     // 创建地面的材质
-    const groundMaterial = new THREE.MeshBasicMaterial({ color: 'gray', side: THREE.DoubleSide }); // 颜色可以根据需要调整
+    const groundMaterial = new THREE.MeshBasicMaterial({
+      color: 'gray',
+      side: THREE.DoubleSide,
+      // transparent: true,
+    }); // 颜色可以根据需要调整
     // 创建地面的网格
     const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-    ground.rotateX(-Math.PI / 2); //平行地面：矩形Mesh默认单面可见，注意旋转-Math.PI / 2
+    // ground.rotateX(-Math.PI / 2); //平行地面：矩形Mesh默认单面可见，注意旋转-Math.PI / 2
 
-    scene.add(house, floor1, floor2, ground);
+    // 添加一个辅助网格地面
+    const gridHelper = new THREE.GridHelper(300, 25, 0x004444, 0x004444);
+    gridHelper.rotateX(-Math.PI / 2);
+
+    scene.add(house, ground, gridHelper);
 
     const animate = () => {
       requestAnimationFrame(animate);
       // house.rotation.y += 0.01;
+      // house.position.y += 0.01;
       renderer.render(scene, camera);
     };
 

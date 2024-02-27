@@ -29,23 +29,40 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/demo',
+    name: '案例',
+    // component: './ThreeJS/index',
+    routes: [
+      {
+        path: '/demo/format',
+        name: '代码格式化',
+        component: './Demo/Format/index',
+      },
+    ],
+  },
+  {
     path: '/ThreeJS',
     name: 'ThreeJS',
     // component: './ThreeJS/index',
     routes: [
       {
+        path: '/ThreeJS/BuildingSeparation',
+        name: '建筑分离',
+        component: './ThreeJS/BuildingSeparation/index',
+      },
+      {
         path: '/ThreeJS/CameraHouse',
-        name: 'CameraHouse',
+        name: '相机控制',
         component: './ThreeJS/ControlCamera/index',
       },
       {
         path: '/ThreeJS/Box',
-        name: 'Box',
+        name: '盒子',
         component: './ThreeJS/Box/index',
       },
       {
         path: '/ThreeJS/Line',
-        name: 'Line',
+        name: '线条',
         component: './ThreeJS/Line/index',
       },
     ],
