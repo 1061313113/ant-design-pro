@@ -3,11 +3,21 @@ import * as THREE from 'three';
 // import 'three-obj-loader'; // 这将自动注册OBJLoader
 // import 'three-orbit-controls'; // 这将自动注册OrbitControls
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// 引入gltf模型加载库GLTFLoader.js
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const floor = {
+  one: '1F',
+  two: '2F',
+  three: '3F',
+};
 
 class ThreeScene extends Component {
   constructor(props) {
     super(props);
     this.sceneRef = React.createRef();
+    this.house2F = null;
+    this.house3F = null;
   }
 
   componentDidMount() {
@@ -16,37 +26,22 @@ class ThreeScene extends Component {
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000,
+      10000,
     );
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.sceneRef.current.appendChild(renderer.domElement);
 
-    // 设置相机位置
-    // camera.position.z = 10;
-    camera.position.set(0, -50, 50); // 设置相机位置
-    camera.lookAt(0, 0, 0); // 让相机朝向XOY平面的中心点
-
     // 创建控制器并实现相机控制
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
 
-    // 创建房子和楼层的3D模型
-    const houseGeometry = new THREE.BoxGeometry(10, 10, 10);
-    const floorGeometry = new THREE.BoxGeometry(10, 1, 10);
-    const material = new THREE.MeshBasicMaterial({ color: 'blue' });
-    const floorMaterial = new THREE.MeshBasicMaterial({ color: 'gray' });
-
-    const house = new THREE.Mesh(houseGeometry, material);
-    const floor1 = new THREE.Mesh(floorGeometry, floorMaterial);
-    const floor2 = new THREE.Mesh(floorGeometry, floorMaterial);
-
-    house.position.set(0, 0, 5);
-    floor1.position.set(0, -8, 0);
-    floor2.position.set(0, -10, 0);
+    //辅助观察的坐标系
+    const axesHelper = new THREE.AxesHelper(10000);
 
     // 创建地面的几何体
-    const groundGeometry = new THREE.PlaneGeometry(100, 100, 10, 10); // 宽度和高度可以根据需要调整
+    const groundSize = 3000;
+    const groundGeometry = new THREE.PlaneGeometry(groundSize, groundSize, 10, 10); // 宽度和高度可以根据需要调整
     // 创建地面的材质
     const groundMaterial = new THREE.MeshBasicMaterial({
       color: 'gray',
@@ -55,13 +50,43 @@ class ThreeScene extends Component {
     }); // 颜色可以根据需要调整
     // 创建地面的网格
     const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-    // ground.rotateX(-Math.PI / 2); //平行地面：矩形Mesh默认单面可见，注意旋转-Math.PI / 2
+    ground.rotateX(-Math.PI / 2); //平行地面：矩形Mesh默认单面可见，注意旋转-Math.PI / 2
 
     // 添加一个辅助网格地面
-    const gridHelper = new THREE.GridHelper(300, 25, 0x004444, 0x004444);
-    gridHelper.rotateX(-Math.PI / 2);
+    const gridHelper = new THREE.GridHelper(3000, 25, 0x004444, 0x004444);
+    // gridHelper.rotateX(-Math.PI / 2);
 
-    scene.add(house, ground, gridHelper);
+    // 设置相机位置
+    // camera.position.z = 10;
+    camera.position.set(1000, 1000, 1000); // 设置相机位置
+    camera.lookAt(0, 0, 0); // 让相机朝向XOY平面的中心点
+
+    // 创建房子和楼层的3D模型
+    const houseY = 300;
+    const houseGeometry1F = new THREE.BoxGeometry(300, houseY, 400);
+    const houseGeometry2F = new THREE.BoxGeometry(300, houseY, 400);
+    const houseGeometry3F = new THREE.BoxGeometry(300, houseY, 400);
+    const material = new THREE.MeshBasicMaterial({ color: 'blue' });
+
+    const house1F = new THREE.Mesh(houseGeometry1F, material);
+    this.house2F = new THREE.Mesh(houseGeometry2F, material);
+    this.house3F = new THREE.Mesh(houseGeometry3F, material);
+
+    house1F.position.set(0, houseY / 2, 0);
+    this.house2F.position.set(0, houseY / 2 + houseY, 0);
+    this.house3F.position.set(0, houseY / 2 + 2 * houseY, 0);
+
+    // 创建GLTF加载器对象
+    const loader = new GLTFLoader();
+
+    loader.load('/src/components/Model/LittlestTokyo.gltf', function (gltf) {
+      console.log('gltf', gltf);
+      console.log('gltf.scene', gltf.scene);
+      // 返回的场景对象gltf.scene插入到threejs场景中
+      scene.add(gltf.scene);
+    });
+
+    scene.add(house1F, this.house2F, this.house3F, ground, gridHelper, axesHelper);
 
     const animate = () => {
       requestAnimationFrame(animate);
@@ -71,14 +96,42 @@ class ThreeScene extends Component {
     };
 
     animate();
+
+    console.log('index.this', this);
   }
+
+  handleShow2FClick = (value) => {
+    if (value === floor.one) {
+      this.house2F.visible = false;
+    }
+    if (value === floor.two) {
+      this.house3F.visible = false;
+    }
+  };
 
   render() {
     return (
       <div
         ref={this.sceneRef}
-        style={{ width: window.innerWidth, height: window.innerHeight }}
-      ></div>
+        style={{ width: window.innerWidth, height: window.innerHeight, position: 'relative' }}
+      >
+        <span
+          style={{ position: 'absolute', color: 'white' }}
+          onClick={() => {
+            this.handleShow2FClick(floor.one);
+          }}
+        >
+          {floor.one}
+        </span>
+        <span
+          style={{ position: 'absolute', color: 'white', top: 20 }}
+          onClick={() => {
+            this.handleShow2FClick(floor.two);
+          }}
+        >
+          {floor.two}
+        </span>
+      </div>
     );
   }
 }

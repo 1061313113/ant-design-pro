@@ -1,55 +1,69 @@
-import { useEffect, useRef } from 'react';
+import React, { Component } from 'react';
 import * as Three from 'three';
 
-const ThreeBuilding = () => {
-  const mountRef = useRef(null);
-  const scene = new Three.Scene();
-  const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  const renderer = new Three.WebGLRenderer();
-  let building3, building2, building1;
+class ThreeBuilding extends Component {
+  constructor(props) {
+    super(props);
+    this.mountRef = React.createRef();
+    this.scene = new Three.Scene();
+    this.camera = new Three.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000,
+    );
+    this.renderer = new Three.WebGLRenderer();
+    this.building1 = null;
+    this.building2 = null;
+    this.building3 = null;
+  }
 
-  useEffect(() => {
-    const mount = mountRef.current;
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    mount.appendChild(renderer.domElement);
+  componentDidMount() {
+    const mount = this.mountRef.current;
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    mount.appendChild(this.renderer.domElement);
 
     const geometry = new Three.BoxGeometry(1, 1, 1);
     const material = new Three.MeshBasicMaterial({ color: 0x00ff00 });
 
-    building1 = new Three.Mesh(geometry, material);
-    building1.position.set(0, 0, -5);
-    scene.add(building1);
+    this.building1 = new Three.Mesh(geometry, material);
+    this.building1.position.set(0, 0, -5);
+    this.scene.add(this.building1);
 
-    building2 = new Three.Mesh(geometry, material);
-    building2.position.set(0, 2, -5);
-    scene.add(building2);
+    this.building2 = new Three.Mesh(geometry, material);
+    this.building2.position.set(0, 2, -5);
+    this.scene.add(this.building2);
 
-    building3 = new Three.Mesh(geometry, material);
-    building3.position.set(0, 4, -5);
-    scene.add(building3);
+    this.building3 = new Three.Mesh(geometry, material);
+    this.building3.position.set(0, 4, -5);
+    this.scene.add(this.building3);
 
-    camera.position.z = 5;
+    this.camera.position.z = 5;
 
     const animate = () => {
-      requestAnimationFrame(animate);
-
-      renderer.render(scene, camera);
+      this.frameId = requestAnimationFrame(animate);
+      this.renderer.render(this.scene, this.camera);
     };
 
     animate();
 
-    return () => {
-      mount.removeChild(renderer.domElement);
-    };
-  }, []);
+    console.log('index.this', this);
+  }
 
-  const handleBuildingClick = (building) => {
+  componentWillUnmount() {
+    cancelAnimationFrame(this.frameId);
+    this.mountRef.current.removeChild(this.renderer.domElement);
+  }
+
+  handleBuildingClick = (building) => {
     if (building === 'building2') {
-      building3.visible = false;
+      this.building3.visible = false;
     }
   };
 
-  return <div ref={mountRef} onClick={() => handleBuildingClick('building2')} />;
-};
+  render() {
+    return <div ref={this.mountRef} onClick={() => this.handleBuildingClick('building2')} />;
+  }
+}
 
 export default ThreeBuilding;
