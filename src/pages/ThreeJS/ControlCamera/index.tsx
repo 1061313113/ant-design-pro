@@ -4,7 +4,8 @@ import * as THREE from 'three';
 // import 'three-orbit-controls'; // 这将自动注册OrbitControls
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // 引入gltf模型加载库GLTFLoader.js
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const floor = {
   one: '1F',
@@ -18,6 +19,7 @@ class ThreeScene extends Component {
     this.sceneRef = React.createRef();
     this.house2F = null;
     this.house3F = null;
+    this.scene = null;
   }
 
   componentDidMount() {
@@ -79,14 +81,34 @@ class ThreeScene extends Component {
     // 创建GLTF加载器对象
     const loader = new GLTFLoader();
 
-    loader.load('/src/components/Model/LittlestTokyo.gltf', function (gltf) {
-      console.log('gltf', gltf);
-      console.log('gltf.scene', gltf.scene);
-      // 返回的场景对象gltf.scene插入到threejs场景中
-      scene.add(gltf.scene);
-    });
+    loader.load(
+      '/public/Model/LittlestTokyo.gltf',
+      function (gltf) {
+        console.log('gltf', gltf);
+        console.log('gltf.scene', gltf.scene);
+        // 返回的场景对象gltf.scene插入到threejs场景中
+        scene.add(gltf.scene);
+      },
+      undefined,
+      function (error) {
+        console.log('loader.error', error);
+      },
+    );
+
+    loader.load(
+      'path_to_your_model.gltf',
+      function (gltf) {
+        scene.add(gltf.scene);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      },
+    );
 
     scene.add(house1F, this.house2F, this.house3F, ground, gridHelper, axesHelper);
+
+    this.scene = scene;
 
     const animate = () => {
       requestAnimationFrame(animate);
