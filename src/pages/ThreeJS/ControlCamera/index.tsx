@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as THREE from 'three';
 // import 'three-obj-loader'; // 这将自动注册OBJLoader
 // import 'three-orbit-controls'; // 这将自动注册OrbitControls
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from 'three/addons/controls/OrbitControls';
 // 引入gltf模型加载库GLTFLoader.js
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
@@ -28,7 +28,12 @@ class ThreeScene extends Component {
       0.1,
       10000,
     );
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true, //开启优化锯齿
+      // 背景透明
+      alpha: true,
+    });
+    renderer.setPixelRatio(window.devicePixelRatio); //防止输出模糊
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.sceneRef.current.appendChild(renderer.domElement);
 
@@ -76,17 +81,19 @@ class ThreeScene extends Component {
     this.house2F.position.set(0, houseY / 2 + houseY, 0);
     this.house3F.position.set(0, houseY / 2 + 2 * houseY, 0);
 
-    // 创建GLTF加载器对象
-    const loader = new GLTFLoader();
+    const loader = new GLTFLoader(); //创建一个GLTF加载器
 
-    loader.load('/src/components/Model/LittlestTokyo.gltf', function (gltf) {
-      console.log('gltf', gltf);
-      console.log('gltf.scene', gltf.scene);
-      // 返回的场景对象gltf.scene插入到threejs场景中
-      scene.add(gltf.scene);
+    const model = new THREE.Group(); //声明一个组对象，用来添加加载成功的三维场景
+
+    loader.load('../../工厂.gltf', function (gltf) {
+      //gltf加载成功后返回一个对象
+      console.log('控制台查看gltf对象结构', gltf);
+      console.log('场景3D模型数据', gltf.scene);
+      model.add(gltf.scene); //三维场景添加到model组对象中
     });
 
-    scene.add(house1F, this.house2F, this.house3F, ground, gridHelper, axesHelper);
+    scene.add(model, house1F, this.house2F, this.house3F, gridHelper, axesHelper);
+    // scene.add(house1F, this.house2F, this.house3F, ground, gridHelper, axesHelper);
 
     const animate = () => {
       requestAnimationFrame(animate);
