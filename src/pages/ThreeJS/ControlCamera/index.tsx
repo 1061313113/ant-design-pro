@@ -4,7 +4,8 @@ import * as THREE from 'three';
 // import 'three-orbit-controls'; // 这将自动注册OrbitControls
 import { OrbitControls } from 'three/addons/controls/OrbitControls';
 // 引入gltf模型加载库GLTFLoader.js
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const floor = {
   one: '1F',
@@ -18,6 +19,7 @@ class ThreeScene extends Component {
     this.sceneRef = React.createRef();
     this.house2F = null;
     this.house3F = null;
+    this.scene = null;
   }
 
   componentDidMount() {
